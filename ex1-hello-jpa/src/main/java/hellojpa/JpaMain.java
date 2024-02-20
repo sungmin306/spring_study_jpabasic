@@ -1,7 +1,9 @@
 package hellojpa;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
+import jpabook.jpashop.domain.Member;
 
 public class JpaMain {
 
@@ -13,18 +15,12 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-
             Memberzz member = new Memberzz();
-            member.setUsername("member1");
+            member.setUsername("user1");
+            member.setCreateBy("kim");
+            member.setCreatedDate(LocalDateTime.now());
 
             em.persist(member);
-
-            Team team = new Team();
-            team.setName("teamA");
-            // 애매해짐
-            team.getMembers().add(member); // 업데이트 쿼리가 어쩔수 없이 날라감 (성능상 단점)
-
-            em.persist(team);
 
 
             tx.commit(); // 이때 디비에 쿼리가 날라감

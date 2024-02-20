@@ -13,17 +13,18 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member = new Member();
-            member.setId(1L);
-            member.setUsername("홍길동");
+            Member member1 = new Member();
+            member1.setId(1L);
+            member1.setUsername("홍길동");
+            em.persist(member1); // 영속 상태 쓰기 지연 SQL 저장소에 쿼리문 저장
 
-            em.persist(member); // 영속 상태 -> 엔티니매니저 1차 캐시에 저장
+            System.out.println("=======아래부터 쿼리문 날라감======");
+            em.flush(); // 강제로 쿼리를 날림
+            em.clear(); // 1차 캐시 비우기
 
-            em.flush(); // 쓰기 지연 저장소에 저장되었던 쿼리문을 DB에 반영
-            em.clear(); // 캐시 클리어
             Member findMember = em.find(Member.class, 1L);
-            System.out.println("이름은 = " + findMember.getUsername());
-
+            findMember.setUsername("이순신");
+            System.out.println("====update 쿼리 날라감 === ");
             tx.commit(); // 이때 디비에 쿼리가 날라감
         } catch (Exception e) {
             tx.rollback();
