@@ -13,19 +13,29 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member1 = new Member();
-            member1.setId(1L);
-            member1.setUsername("홍길동");
-            em.persist(member1); // 영속 상태 쓰기 지연 SQL 저장소에 쿼리문 저장
 
-            System.out.println("=======아래부터 쿼리문 날라감======");
-            em.flush(); // 강제로 쿼리를 날림
-            em.clear(); // 1차 캐시 비우기
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            Member findMember = em.find(Member.class, 1L);
-            findMember.setUsername("이순신");
-            System.out.println("====update 쿼리 날라감 === ");
-            tx.commit(); // 이때 디비에 쿼리가 날라감
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setTeam(team);
+            em.persist(member);
+
+            Team teamB = new Team();
+            teamB.setName("TeamB");
+            em.persist(teamB);
+
+            member.setTeam(teamB);
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
+            String name = findTeam.getName();
+            System.out.println(name);
+
+            // 둘의 연관관계 생성
+
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {

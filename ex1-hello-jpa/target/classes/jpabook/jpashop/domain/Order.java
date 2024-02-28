@@ -27,7 +27,7 @@ public class Order extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    private Members member;
 
     @OneToOne
     @JoinColumn(name = "DELEVERY_ID")
@@ -52,11 +52,11 @@ public class Order extends BaseEntity{
         this.id = id;
     }
 
-    public Member getMember() {
+    public Members getMember() {
         return member;
     }
 
-    public void setMember(Member member) {
+    public void setMember(Members member) {
         this.member = member;
     }
 

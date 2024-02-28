@@ -4,9 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jpabook.jpashop.domain.Book;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.Members;
 
 public class jpaBookMain {
 
@@ -19,11 +17,8 @@ public class jpaBookMain {
         tx.begin();
         try {
 
-            Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("김영한");
-
-            em.persist(book);
+//            Members member = em.find(Members.class, 1L);
+//            pritMemberAndTeam(member);
 
             tx.commit(); // 이떄 디비에 쿼리가 날라감
         } catch (Exception e) {
@@ -33,4 +28,7 @@ public class jpaBookMain {
         }
         emf.close();
     }
+//    public static void printMemberAndTeam(Members member) {
+//        String username = member.getName();
+//    }
 }

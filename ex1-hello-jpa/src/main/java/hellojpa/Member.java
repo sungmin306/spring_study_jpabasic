@@ -2,22 +2,19 @@ package hellojpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
-import jpabook.jpashop.domain.BaseEntity;
+
 
 @Entity
 //@SequenceGenerator(
 //        name = "MEMBER_SEQ_GENERATOR",
 //        sequenceName = "MEMBER_SEQ",
 //        initialValue = 1, allocationSize = 50) // 미리 올려놓고 해
-public class Memberzz extends BaseEntity {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE,
@@ -29,20 +26,13 @@ public class Memberzz extends BaseEntity {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_IO", insertable = false, updatable = false) // 이렇게 하면 일대다 양방향 가능 (강제 읽기 전용으로 바꿔주는 것)
+    @ManyToOne(fetch = FetchType.LAZY) // team을 프록시 객체로 준다.
+    @JoinColumn(name = "TEAM_IO")
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
-
-    public Memberzz() {
+    public Member() {
     }
-
+    //, insertable = false, updatable = false) // 이렇게 하면 일대다 양방향 가능 (강제 읽기 전용으로 바꿔주는 것)
     public Long getId() {
         return id;
     }
@@ -59,5 +49,11 @@ public class Memberzz extends BaseEntity {
         this.username = username;
     }
 
+    public Team getTeam() {
+        return team;
+    }
 
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

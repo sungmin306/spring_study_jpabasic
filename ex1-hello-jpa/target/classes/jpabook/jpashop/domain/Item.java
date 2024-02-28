@@ -2,7 +2,6 @@ package jpabook.jpashop.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
