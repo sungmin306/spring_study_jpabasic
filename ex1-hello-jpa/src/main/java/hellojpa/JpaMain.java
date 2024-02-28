@@ -1,7 +1,9 @@
 package hellojpa;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.Hibernate;
 
 public class JpaMain {
@@ -15,21 +17,45 @@ public class JpaMain {
         tx.begin();
         try {
 
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(new Address("hoemcity1", "street", "100000"));
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
-            em.persist(parent);
-            em.persist(child1);
-            em.persist(child2);
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
 
-            Parent findParent = em.find(Parent.class, parent.getId());
-            em.remove(findParent);
+            member.getAddressHistory().add(new Address("old1", "street", "100000"));
+            member.getAddressHistory().add(new Address("old2", "street", "100000"));
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+            System.out.println("===========start===============");
+            Member findMember = em.find(Member.class, member.getId());
+
+            // 수정
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+
+            //치킨 -> 한식
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
 
 
+            findMember.getAddressHistory().remove(new Address("old1", "street", "100000")); // equals 가 중요함
+            findMember.getAddressHistory().add(new Address("newCity1", "street", "100000")); // equals 가 중요함
 
+            // 조회
+//            List<Address> addressHisory = findMember.getAddressHistory();
+//            for(Address address : addressHisory) {
+//                System.out.println("address = " + address.getCity());
+//            }
+//            Set<String> favoriteFoods = findMember.getFavoriteFoods();
+//            for(String favoriteFood : favoriteFoods) {
+//                System.out.println("favoriteFood = " + favoriteFood);
+//            }
             tx.commit(); // 이때 디비에 쿼리가 날라감
         } catch (Exception e) {
             tx.rollback();
@@ -40,17 +66,6 @@ public class JpaMain {
         emf.close();
     }
 
-    private static void printMember(Member member) {
-        System.out.println("member = " + member.getUsername());
-    }
-    public static void printMemberAndTeam(Member member) {
-        String username = member.getUsername();
-        System.out.println("username = " + username);
-
-        Team team = member.getTeam();
-        System.out.println("team = " + team.getName());
-
-    }
 }
 
 //n+1 문제 발생
