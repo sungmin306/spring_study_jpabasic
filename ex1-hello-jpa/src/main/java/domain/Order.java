@@ -1,4 +1,4 @@
-package jpabook.jpashop.domain;
+package domain;
 
 
 import jakarta.persistence.Column;
